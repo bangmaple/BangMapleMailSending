@@ -1,5 +1,6 @@
 package com.bangmaple.fptu_maildesktopapp;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import mdlaf.MaterialLookAndFeel;
@@ -13,6 +14,7 @@ public class MainController extends javax.swing.JFrame {
 
     private static int NUMBER_OF_MAIL_SEND = 1;
     private static int NUMBER_OF_SEC = 5;
+    private static String[] ADDRESSES = null;
 
     public MainController() {
         this.setLocationRelativeTo(null);
@@ -46,14 +48,18 @@ public class MainController extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please don't leave receiver e-mail blank.");
             return false;
         } else {
-            String[] addresses = txtAddress.getText().trim().split(",");
-            if (addresses == null) {
-                JOptionPane.showMessageDialog(this, "Receiver address is not in correct format!");
+            if (!txtAddress.getText().contains(",")) {
+                ADDRESSES = new String[]{txtAddress.getText()};
             } else {
-                for (int i = 0; i < addresses.length; i++) {
-                    if (!addresses[i].trim().matches("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")) {
-                        JOptionPane.showMessageDialog(this, "Receiver address is not in correct format!");
-                        return false;
+                ADDRESSES = txtAddress.getText().trim().split(",");
+                if (ADDRESSES == null) {
+                    JOptionPane.showMessageDialog(this, "Receiver address is not in correct format!");
+                } else {
+                    for (int i = 0; i < ADDRESSES.length; i++) {
+                        if (!ADDRESSES[i].trim().matches("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")) {
+                            JOptionPane.showMessageDialog(this, "Receiver address is not in correct format!");
+                            return false;
+                        }
                     }
                 }
             }
@@ -103,6 +109,30 @@ public class MainController extends javax.swing.JFrame {
         return true;
     }
 
+    private void disableItems() {
+        btnSend.setEnabled(false);
+        btnReset.setEnabled(false);
+        jButton1.setEnabled(false);
+        txtPassword.setEnabled(false);
+        txtUsername.setEnabled(false);
+        txtTitle.setEnabled(false);
+        txtNumSend.setEnabled(false);
+        txtSec.setEnabled(false);
+        txtMail.setEnabled(false);
+    }
+
+    private void enableItems() {
+        btnSend.setEnabled(true);
+        btnReset.setEnabled(true);
+        jButton1.setEnabled(true);
+        txtPassword.setEnabled(true);
+        txtUsername.setEnabled(true);
+        txtTitle.setEnabled(true);
+        txtNumSend.setEnabled(true);
+        txtSec.setEnabled(true);
+        txtMail.setEnabled(true);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -124,7 +154,8 @@ public class MainController extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtStatus = new javax.swing.JTextArea();
-        btnExit = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        btnUse = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -208,10 +239,17 @@ public class MainController extends javax.swing.JFrame {
         txtStatus.setText("Status: Waiting to send...");
         jScrollPane3.setViewportView(txtStatus);
 
-        btnExit.setText("Exit");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Exit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnUse.setText("How to use");
+        btnUse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseActionPerformed(evt);
             }
         });
 
@@ -233,9 +271,11 @@ public class MainController extends javax.swing.JFrame {
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 676, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnExit)))
+                        .addComponent(btnUse)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -244,7 +284,8 @@ public class MainController extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExit))
+                    .addComponent(jButton1)
+                    .addComponent(btnUse))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -296,6 +337,11 @@ public class MainController extends javax.swing.JFrame {
         );
 
         btnReset.setText("RESET");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         btnSend.setFont(new java.awt.Font("Lucida Grande", 1, 20)); // NOI18N
         btnSend.setText("SEND");
@@ -345,37 +391,41 @@ public class MainController extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (validateInfo()) {
             SendMailDAO dao = new SendMailDAO();
-
             new SwingWorker<Void, Void>() {
+                boolean flag = true;
+
                 @Override
                 protected Void doInBackground() throws Exception {
-                    btnSend.setEnabled(false);
-                    btnReset.setEnabled(false);
+                    disableItems();
+                    txtStatus.setForeground(Color.CYAN);
                     txtStatus.setText("Status: Sending mail now...");
 
                     try {
-                        String[] addresses = txtAddress.getText().trim().split(",");
                         for (int i = 0; i < NUMBER_OF_MAIL_SEND; i++) {
-                            for (int j = 0; j < addresses.length; j++) {
-                                dao.sendMail(txtUsername.getText().trim(), txtPassword.getText().trim(), addresses[j], txtTitle.getText(), txtMail.getText());
-                            }
-                            Thread.sleep(NUMBER_OF_SEC * 1000);
                             if (NUMBER_OF_MAIL_SEND > 1) {
+                                txtStatus.setForeground(Color.CYAN);
                                 txtStatus.setText("Status: Sending mail number " + (i + 1) + " ...");
                             }
+                            for (int j = 0; j < ADDRESSES.length; j++) {
+                                dao.sendMail(txtUsername.getText().trim(), txtPassword.getText().trim(), ADDRESSES[j], txtTitle.getText(), txtMail.getText());
+                            }
+                            Thread.sleep(NUMBER_OF_SEC * 1000);
                         }
                     } catch (Exception e) {
-                        btnSend.setEnabled(true);
-                        btnReset.setEnabled(true);
-                        JOptionPane.showMessageDialog(null, "Error while sending mail. Did you enter wrong info or sent too many mails?");
+                        enableItems();
+                        JOptionPane.showMessageDialog(null, "Error while sending mail. Did you enter wrong info or sent too many mails?\nPlease read 'How to use'.");
+                        txtStatus.setForeground(Color.red);
                         txtStatus.setText("Status: Failed! Please send again!");
+                        flag = false;
                     }
-                    btnSend.setEnabled(true);
-                    btnReset.setEnabled(true);
+                    enableItems();
+                    if (flag) {
+                        txtStatus.setForeground(Color.GREEN);
+                        txtStatus.setText("Status: Successful!");
+                    }
                     return null;
                 }
             }.execute();
-            txtStatus.setText("Status: Successful!");
         }
 
     }//GEN-LAST:event_btnSendActionPerformed
@@ -384,11 +434,34 @@ public class MainController extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSendMouseClicked
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+    private void btnUseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Thanks for using this application! ^^");
-        System.exit(0);
-    }//GEN-LAST:event_btnExitActionPerformed
+        JOptionPane.showMessageDialog(this, "- Turn on the \"Less secure app access\" in the Google Account Setting.\n- Type your receiver(s) and your e-mail information to proceed.\n- Type number of mail(s) and sec(s) to send.", "How to use this program?", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnUseActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        txtMail.setText("");
+        txtTitle.setText("");
+        txtPassword.setText("");
+        txtUsername.setText("");
+        txtNumSend.setText("1");
+        txtSec.setText("5");
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (!txtMail.getText().trim().isEmpty() || !txtTitle.getText().trim().isEmpty()) {
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure want to exit?");
+            if (choice == JOptionPane.OK_OPTION) {
+                JOptionPane.showMessageDialog(this, "Thanks for using my application! ^^");
+                System.exit(0);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Thanks for using my application! ^^");
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -401,9 +474,10 @@ public class MainController extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSend;
+    private javax.swing.JButton btnUse;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
